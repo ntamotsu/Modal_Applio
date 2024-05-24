@@ -8,7 +8,9 @@ python -m modal setup
 ブラウザでModalのページが開くので画面の指示に従ってトークンを発行する。
 
 # 実行
-applio.pyの`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力してから以下を実行する。
+applio.pyの`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力する。
+必要に応じて`custom_pretrained_urls`を編集する。
+以下のコマンドでApplioを起動する。
 ```
 modal serve applio.py
 (もしくは modal deploy applio.py)

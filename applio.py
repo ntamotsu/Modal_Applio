@@ -9,6 +9,13 @@ import subprocess
 
 # TODO: ローカルの音声データセットのディレクトリを指定してください
 local_datasets_dir = ""
+custom_pretrained_urls = [
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3E_ContVec_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3E_ContVec_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3F_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3F_48k.pth",
+    # 適宜追加・削除してください
+]
 
 COMMIT_SHA = "5f9f65b6a05aae3d5a386630133f9ffe431b6af1"
 REMOTE_LOGS_DIR = "/root/logs"
@@ -84,22 +91,13 @@ class Model:
         # pretrained_v2ダウンロード
         run_prerequisites_script("False", "True", "True", "True")
 
-        custom_pretrained_urls = [
-            "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3E_ContVec_48k.pth",
-            "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3E_ContVec_48k.pth",
-            "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3F_48k.pth",
-            "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3F_48k.pth",
-            # 適宜追加・削除してください
-        ]
         pretraineds_custom_path = os.path.join(
             "rvc", "pretraineds", "pretraineds_custom"
         )
         os.makedirs(pretraineds_custom_path, exist_ok=True)
         for url in custom_pretrained_urls:
-            threading.Thread(
-                target=wget.download, args=(url, pretraineds_custom_path)
-            ).start()
             print(f"Downloading {url} to {pretraineds_custom_path}")
+            wget.download(url, pretraineds_custom_path)
 
     @modal.web_server(port=6969, startup_timeout=120)
     def web(self):
