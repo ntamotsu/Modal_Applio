@@ -1,19 +1,21 @@
+"""
+Tensorboard appをModal上で起動するスクリプト
+"""
+
 import modal
 
 
 vol = modal.Volume.from_name("applio-logs", create_if_missing=True)
 
-image: modal.Image = (
-    modal.Image.debian_slim(python_version="3.10")
-    .pip_install("tensorboard")
+image: modal.Image = modal.Image.debian_slim(python_version="3.10").pip_install(
+    "tensorboard"
 )
 
 app = modal.App(name="tensorboard_app", image=image)
 
+
 @app.function(
     concurrency_limit=1,
-    # keep_warm=1,
-    timeout=86400,  # 1 days
     volumes={"/root/watch_logs": vol},
 )
 @modal.wsgi_app()
