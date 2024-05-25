@@ -15,7 +15,7 @@ import pyautogui
 import numpy as np
 from pynput.mouse import Listener, Button
 
-interval = 10  # 定期クリックの間隔（秒）
+interval = 50  # 定期クリックの間隔（秒）
 
 
 def get_click_coordinates():
