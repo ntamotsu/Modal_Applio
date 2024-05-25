@@ -10,8 +10,6 @@ import subprocess
 # TODO: ローカルの音声データセットのディレクトリを指定してください
 local_datasets_dir = ""
 custom_pretrained_urls = [
-    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3E_ContVec_48k.pth",
-    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3E_ContVec_48k.pth",
     "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3F_48k.pth",
     "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3F_48k.pth",
     # 適宜追加・削除してください
@@ -67,7 +65,8 @@ app = modal.App(name="applio", image=image)
     concurrency_limit=1,
     # An optional minimum number of containers to always keep warm (use concurrency_limit for maximum).
     # keep_warm=1,
-    timeout=60 * 60 * 24,  # 1 days (設定可能最大値)
+    timeout=60 * 60 * 24,  # 1 day (設定可能最大値)
+    container_idle_timeout=60,  # 1 minute (デフォルト値)
     volumes={REMOTE_LOGS_DIR: vol},
     _allow_background_volume_commits=True,
     mounts=(
@@ -86,7 +85,6 @@ class Model:
         from core import run_prerequisites_script  # type: ignore
         import wget  # type: ignore
         import os
-        import threading
 
         # pretrained_v2ダウンロード
         run_prerequisites_script("False", "True", "True", "True")
