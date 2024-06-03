@@ -7,7 +7,8 @@ import modal.gpu
 from pathlib import Path
 import subprocess
 
-# TODO: ローカルの音声データセットのディレクトリを指定してください
+
+# TODO: ローカルにある音声データセットのディレクトリを指定してください。 e.g. "/Users/username/wav_datasets"
 local_datasets_dir = ""
 custom_pretrained_urls = [
     "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3F_48k.pth",
@@ -15,13 +16,16 @@ custom_pretrained_urls = [
     # 適宜追加・削除してください
 ]
 
+logs_volume_name = "applio-logs"
+app_name = "applio"
+
 COMMIT_SHA = "5f9f65b6a05aae3d5a386630133f9ffe431b6af1"
 REMOTE_LOGS_DIR = "/root/logs"
 REMOTE_DATASETS_DIR = "/root/assets/datasets"
 LOCAL_MUTE_DIR = Path(__file__).parent / "mute"
 
 
-vol = modal.Volume.from_name("applio-logs", create_if_missing=True)
+vol = modal.Volume.from_name(logs_volume_name, create_if_missing=True)
 try:
     # ローカルからVolumeにmuteディレクトリをアップロード
     with vol.batch_upload(force=True) as batch:
@@ -52,19 +56,13 @@ image: modal.Image = (
     )
 )
 
-app = modal.App(name="applio", image=image)
+app = modal.App(name=app_name, image=image)
 
 
 @app.cls(
     gpu=modal.gpu.T4(),
-    # Allows 100 concurrent requests per container.
     allow_concurrent_inputs=100,
-    # An optional maximum number of concurrent containers running the function (use keep_warm for minimum).
-    # Restrict to 1 container because we want our Applio session state
-    # to be on a single container.
     concurrency_limit=1,
-    # An optional minimum number of containers to always keep warm (use concurrency_limit for maximum).
-    # keep_warm=1,
     timeout=60 * 60 * 24,  # 1 day (設定可能最大値)
     container_idle_timeout=60,  # 1 minute (デフォルト値)
     volumes={REMOTE_LOGS_DIR: vol},
@@ -89,6 +87,7 @@ class Model:
         # pretrained_v2ダウンロード
         run_prerequisites_script("False", "True", "True", "True")
 
+        # custom pretrainedダウンロード
         pretraineds_custom_path = os.path.join(
             "rvc", "pretraineds", "pretraineds_custom"
         )
