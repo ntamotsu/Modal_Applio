@@ -19,7 +19,7 @@ custom_pretrained_urls = [
 logs_volume_name = "applio-logs"
 app_name = "applio"
 
-COMMIT_SHA = "5f9f65b6a05aae3d5a386630133f9ffe431b6af1"
+TAG_NAME = "3.2.0"
 REMOTE_LOGS_DIR = "/root/logs"
 REMOTE_DATASETS_DIR = "/root/assets/datasets"
 LOCAL_MUTE_DIR = Path(__file__).parent / "mute"
@@ -41,7 +41,7 @@ image: modal.Image = (
     .run_commands(
         "cd /root && git init .",
         "cd /root && git remote add --fetch origin https://github.com/IAHispano/Applio.git",
-        f"cd /root && git checkout {COMMIT_SHA}",
+        f"cd /root && git checkout {TAG_NAME}",
         f"rm -rf {REMOTE_LOGS_DIR}/mute",  # Volumeは空のディレクトリにしかマウントできないため、既存のmuteディレクトリは一旦削除
         "cd /root && pip install -r requirements.txt",
         "cd /root && pip uninstall torch torchvision torchaudio -y",

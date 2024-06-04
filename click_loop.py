@@ -1,4 +1,5 @@
 """
+## JP
 長い実行時間を要する処理を`@modal.web_server`で立ち上げたwebアプリから行う場合(モデル学習など)、
 `@app.cls`や`@app.function`で`timeout`を長く設定しても現状1時間きっかりで強制中断されてしまう。
 しかし実は、2ウィンドウでwebアプリを開いて両方から定期的になんらかのリクエストを送り続ければ1時間以上の処理も維持できる。
@@ -8,10 +9,25 @@ Usage:
     1. `modal serve applio.py`でApplioを立ち上げ、"Start Training"ボタンを押す直前まで進める。
     2. もう1つのウィンドウでApplioを開く。
     3. 本スクリプトの`applio_app_id`と`rvc_model_name`に値を入力後`python click_loop.py`で起動し、
-       開いている2ウィンドウそれぞれで定期クリックしたい箇所を1地点ずつ指定してスペースキーを押す。
+       開いている2ウィンドウそれぞれで定期クリックしたい箇所(Refreshボタンなど)を1地点ずつ指定してスペースキーを押す。
     4. 指定した2地点が交互に自動でクリックされ続ける。
     5. 学習が終了したら指定したvolume上の{rvc_model_name}ディレクトリに{FILENAME_TO_CHECK}ファイルが生成されるので、
        それを検知して終了する。
+       
+## EN
+When running a long-running process in a web app launched by `@modal.web_server` (such as model training),
+even if you set a long `timeout` value in `@app.cls` or `@app.function`, it will be forcibly interrupted after exactly 1 hour.
+However, if you open the web app in two windows and keep sending requests periodically from both windows, you can maintain the process for more than 1 hour.
+This script clicks specified points alternately in the two windows and stops when the specified conditions are met, also stopping the web app.
+
+Usage:
+    1. Launch Applio with `modal serve applio.py` and proceed until just before pressing the "Start Training" button.
+    2. Open Applio in another window.
+    3. After entering values for `applio_app_id` and `rvc_model_name` in this script, run it with `python click_loop.py`.
+       Specify one point to click periodically (such as Refresh button) in each of the two open windows by pressing the space key.
+    4. The two specified points will be clicked automatically in alternation.
+    5. When the training is completed, a file matching the pattern {FILENAME_TO_CHECK} will be generated in the {rvc_model_name} directory on the specified volume.
+       The script will detect this file, stop clicking, and also stop the Applio app.
 """
 
 import asyncio
