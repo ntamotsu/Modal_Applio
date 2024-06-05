@@ -8,14 +8,19 @@ python -m modal setup
 ブラウザでModalのページが開くので画面の指示に従ってトークンを発行する。
 
 # 実行
-applio.pyの`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力する。  
-必要に応じて`custom_pretrained_urls`を編集する。  
-以下のコマンドでApplioを起動する。  
+1. applio_asgiapp.pyの`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力する。  
+2. 必要に応じて`custom_pretrained_urls`を編集する。  
+3. 以下のコマンドでApplioを起動する。  
 ```
-modal serve applio.py
-(もしくは modal deploy applio.py)
+modal serve applio_asgiapp.py
+(もしくは modal deploy applio_asgiapp.py)
 ```
-コンソールとModalダッシュボードでURLが表示されるのでどちらかからアクセス。
+4. しばらく待つとコンソールとModalダッシュボードにURLが表示されるのでどちらかからアクセスする。(この時点ではまだApplioは開けない)
+5. さらに待つとコンソールとModalダッシュボードのLogsにgradio public URLが表示されるのでどちらかからアクセスする。  
+![pic1](doc/gradio_public_url_in_console.png)
+↑コンソール
+![pic2](doc/gradio_public_url_in_modal_logs.png)
+↑ModalダッシュボードのLogs
 
 # Tensorboard起動
 ```
@@ -25,8 +30,6 @@ modal serve logs_tensorboard.py
 コンソールとModalダッシュボードでURLが表示されるのでどちらかからアクセス。  
 [ほぼ公式ドキュメントの丸パクリ](https://modal.com/docs/examples/tensorflow_tutorial)  
 
-# 自動定期クリックツール起動
-Modal上でのモデル学習時、定期的にRefreshボタンなどをクリックさせてExecutionを維持するためのツール。
-```
-python click_loop.py
-```
+# その他のファイルについて
+`applio_webserver.py`と`click_loop.py`は`@modal.web_server`を用いたApplioに必要なファイル。  
+無視していいです。一応使い方は`click_loop.py`のトップコメントに書いてあります。  

@@ -1,5 +1,5 @@
 """
-ApplioをModal上で起動するスクリプト
+ApplioをModal上で起動するスクリプト(@web_server使用)
 """
 
 import modal
