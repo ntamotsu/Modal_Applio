@@ -18,7 +18,7 @@ modal serve applio_asgiapp.py
 ```
 modal deploy applio_asgiapp.py
 ```
-4. しばらく待つとコンソールとModalダッシュボードにURLが表示されるのでどちらかからアクセスする。(この時点ではまだApplioは開けない)
+4. しばらく待つとコンソールとModalダッシュボードにURL (https://~~~.modal.run) が表示されるのでどちらかからアクセスする。(この時点ではまだApplioは開けない)
 5. さらに待つとコンソールとModalダッシュボードLogsにgradio public URLが表示されるのでどちらかからアクセスする。  
 ![pic1](doc/gradio_public_url_in_console.png)  
 ↑コンソール  
