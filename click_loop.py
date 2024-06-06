@@ -6,7 +6,7 @@
 このスクリプトでは2ウィンドウそれぞれの適当なボタンを交互にクリックし続け、条件を満たしたら中断してwebアプリも停止する。
 
 Usage:
-    1. `modal serve applio.py`でApplioを立ち上げ、"Start Training"ボタンを押す直前まで進める。
+    1. `modal serve applio_webserver.py`でApplioを立ち上げ、"Start Training"ボタンを押す直前まで進める。
     2. もう1つのウィンドウでApplioを開く。
     3. 本スクリプトの`applio_app_id`と`rvc_model_name`に値を入力後`python click_loop.py`で起動し、
        開いている2ウィンドウそれぞれで定期クリックしたい箇所(Refreshボタンなど)を1地点ずつ指定してスペースキーを押す。
