@@ -1,3 +1,8 @@
+# 概要
+ModalのサーバーレスGPUを使ってApplioを動かすだけ。
+- [Modal](https://modal.com/)
+- [Applio](https://docs.applio.org/)
+
 # セットアップ
 ```
 python -m venv .venv
