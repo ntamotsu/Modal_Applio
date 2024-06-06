@@ -17,10 +17,10 @@ modal serve applio_asgiapp.py
 ```
 4. しばらく待つとコンソールとModalダッシュボードにURLが表示されるのでどちらかからアクセスする。(この時点ではまだApplioは開けない)
 5. さらに待つとコンソールとModalダッシュボードのLogsにgradio public URLが表示されるのでどちらかからアクセスする。  
-![pic1](doc/gradio_public_url_in_console.png)
-↑コンソール
-![pic2](doc/gradio_public_url_in_modal_logs.png)
-↑ModalダッシュボードのLogs
+![pic1](doc/gradio_public_url_in_console.png)  
+↑コンソール  
+![pic2](doc/gradio_public_url_in_modal_logs.png)  
+↑ModalダッシュボードのLogs  
 
 # Tensorboard起動
 ```
