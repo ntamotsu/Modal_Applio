@@ -4,17 +4,19 @@ ModalのサーバーレスGPUを使ってApplioを動かすだけ。
 - [Applio](https://docs.applio.org/)
 
 # セットアップ
+1. 事前にModalのアカウントを作成しておく。
+2. 以下のコマンドを順次実行する。
 ```
 python -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
 python -m modal setup
 ```
-ブラウザでModalのページが開くので画面の指示に従ってトークンを発行する。
+3. ブラウザでModalのページが開くので画面の指示に従ってトークンを発行する。
 
-# 実行
-1. `applio_asgiapp.py`の`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力する。  
-2. 必要に応じて`custom_pretrained_urls`を編集する。  
+# Applio起動
+1. 学習を行う場合は`applio_asgiapp.py`の`local_datasets_dir`にローカルの音声データセットが格納されているディレクトリのパスを入力する。  
+2. 使いたい事前学習モデルがある場合は`custom_pretrained_urls`を編集する。  
 3. 以下のコマンドでApplioを起動する。  
 ```
 modal serve applio_asgiapp.py
