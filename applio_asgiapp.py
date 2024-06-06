@@ -25,9 +25,9 @@ app_name = "applio"
 TAG_NAME = "3.2.0"
 REMOTE_LOGS_DIR = "/root/logs"
 REMOTE_DATASETS_DIR = "/root/assets/datasets"
-REMOTE_REQUIREMENTS_FILE = "/root/requirements_applio.txt"
+REMOTE_REQUIREMENTS_FILE = "/root/requirements_uv.txt"
 LOCAL_MUTE_DIR = Path(__file__).parent / "mute"
-LOCAL_REQUIREMENTS_FILE = Path(__file__).parent / "requirements_applio.txt"
+LOCAL_REQUIREMENTS_FILE = Path(__file__).parent / "requirements_uv.txt"
 
 
 vol = modal.Volume.from_name(logs_volume_name, create_if_missing=True)

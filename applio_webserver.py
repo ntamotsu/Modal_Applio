@@ -13,6 +13,10 @@ local_datasets_dir = ""
 custom_pretrained_urls = [
     "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/D_KLMv7s_Batch3F_48k.pth",
     "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch3/resolve/main/G_KLMv7s_Batch3F_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch4/resolve/main/D_KLMv7s_Batch4_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch4/resolve/main/G_KLMv7s_Batch4_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch4/resolve/main/D_KLM4T_48k.pth",
+    "https://huggingface.co/SeoulStreamingStation/KLMv7s_Batch4/resolve/main/G_KLM4T_48k.pth",
     # 適宜追加・削除してください
 ]
 
@@ -22,7 +26,9 @@ app_name = "applio"
 TAG_NAME = "3.2.0"
 REMOTE_LOGS_DIR = "/root/logs"
 REMOTE_DATASETS_DIR = "/root/assets/datasets"
+REMOTE_REQUIREMENTS_FILE = "/root/requirements_uv.txt"
 LOCAL_MUTE_DIR = Path(__file__).parent / "mute"
+LOCAL_REQUIREMENTS_FILE = Path(__file__).parent / "requirements_uv.txt"
 
 
 vol = modal.Volume.from_name(logs_volume_name, create_if_missing=True)
@@ -38,14 +44,12 @@ except AssertionError as e:
 image: modal.Image = (
     modal.Image.debian_slim(python_version="3.10")
     .apt_install("git", "ffmpeg")
+    .pip_install("uv")
     .run_commands(
         "cd /root && git init .",
         "cd /root && git remote add --fetch origin https://github.com/IAHispano/Applio.git",
         f"cd /root && git checkout {TAG_NAME}",
         f"rm -rf {REMOTE_LOGS_DIR}/mute",  # Volumeは空のディレクトリにしかマウントできないため、既存のmuteディレクトリは一旦削除
-        "cd /root && pip install -r requirements.txt",
-        "cd /root && pip uninstall torch torchvision torchaudio -y",
-        "cd /root && pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1",
     )
     .env(
         {
@@ -60,7 +64,7 @@ app = modal.App(name=app_name, image=image)
 
 
 @app.cls(
-    gpu=modal.gpu.T4(),
+    # gpu=modal.gpu.T4(),
     allow_concurrent_inputs=100,
     concurrency_limit=1,
     timeout=60 * 60 * 24,  # 1 day (設定可能最大値)
@@ -69,17 +73,31 @@ app = modal.App(name=app_name, image=image)
     _allow_background_volume_commits=True,
     mounts=(
         [
-            modal.Mount.from_local_dir(
-                local_datasets_dir, remote_path=REMOTE_DATASETS_DIR
+            modal.Mount.from_local_file(
+                LOCAL_REQUIREMENTS_FILE,
+                remote_path=REMOTE_REQUIREMENTS_FILE,
             )
         ]
-        if local_datasets_dir
-        else ()
+        + (
+            [
+                modal.Mount.from_local_dir(
+                    local_datasets_dir, remote_path=REMOTE_DATASETS_DIR
+                )
+            ]
+            if local_datasets_dir
+            else []
+        )
     ),
 )
 class Model:
     @modal.build()
     def model_preload(self):
+        import subprocess
+
+        subprocess.run(
+            f"uv pip install --system -r {REMOTE_REQUIREMENTS_FILE}", shell=True
+        )
+
         from core import run_prerequisites_script  # type: ignore
         import wget  # type: ignore
         import os
