@@ -64,7 +64,7 @@ app = modal.App(name=app_name, image=image)
 
 
 @app.cls(
-    # gpu=modal.gpu.T4(),
+    gpu=modal.gpu.T4(),
     allow_concurrent_inputs=100,
     concurrency_limit=1,
     timeout=60 * 60 * 24,  # 1 day (設定可能最大値)
@@ -94,8 +94,9 @@ class Model:
     def model_preload(self):
         import subprocess
 
+        print("Installing requirements...")
         subprocess.run(
-            f"uv pip install --system -r {REMOTE_REQUIREMENTS_FILE}", shell=True
+            f"uv pip install --system -v -r {REMOTE_REQUIREMENTS_FILE}", shell=True
         )
 
         from core import run_prerequisites_script  # type: ignore

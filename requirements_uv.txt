@@ -42,4 +42,4 @@ flask
 local-attention
 
 # Additional
-pydantic
+pydantic==2.7.3

@@ -1,5 +1,11 @@
 """
-ApplioをModal上で起動するスクリプト(@asgi_app使用)
+## スクリプトの概要:
+  ApplioをModal上で起動します(@asgi_app使用)。
+
+## 実行手順:
+1. 学習を行う場合は`local_datasets_dir`に「音声データセットが格納されているローカルのディレクトリのパス」を入力。 e.g. "/Users/username/wav_datasets"
+2. 使いたい事前学習モデルがある場合は`custom_pretrained_urls`を編集。
+3. `modal serve applio_asgiapp.py` もしくは `modal deploy applio_asgiapp.py`を実行。
 """
 
 import modal
@@ -92,8 +98,9 @@ class Model:
     def model_preload(self):
         import subprocess
 
+        print("Installing requirements...")
         subprocess.run(
-            f"uv pip install --system -r {REMOTE_REQUIREMENTS_FILE}", shell=True
+            f"uv pip install --system -v -r {REMOTE_REQUIREMENTS_FILE}", shell=True
         )
 
         from core import run_prerequisites_script  # type: ignore
