@@ -1,3 +1,5 @@
+# Made for `uv pip install -r` 
+
 # General dependencies
 ffmpeg-python>=0.2.0
 numpy==1.23.5
